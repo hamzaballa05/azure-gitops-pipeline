@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.13</version> <!--Version de Spring Boot modifié de 3.3.5 en 3.3.13 (méme ligne pas de 3.4.x car on veut pas un changement de comportement majeur )--> 
+        <version>3.5.16</version> <!-- Spring Boot 3.5.16 : correctifs de securite (la branche 3.3 n est plus supportee) --> 
         <relativePath/>
     </parent>
 
@@ -21,6 +21,9 @@
 
     <properties>
         <java.version>21</java.version>
+        <!-- Surcharges de securite : correctifs publies apres la derniere version 3.5.x -->
+        <jackson-bom.version>2.21.7</jackson-bom.version>
+        <tomcat.version>10.1.60</tomcat.version>
     </properties>
 
     <dependencies>
