@@ -43,3 +43,14 @@ jobs:
           MYSQLDATABASE: acadconf
           MYSQLUSER: root
           MYSQLPASSWORD: test-only-password
+
+  docker-build:
+    needs: build-test
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v5
+
+      - name: Construire l'image Docker
+        run: docker build -t acadconf:${{ github.sha }} app
