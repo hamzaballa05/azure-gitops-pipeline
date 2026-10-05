@@ -55,11 +55,29 @@ jobs:
       - name: Construire l'image Docker
         run: docker build -t acadconf:${{ github.sha }} app
 
+      - name: Télécharger les bases de failles Trivy (3 tentatives)
+        run: |
+          retry() {
+            for i in 1 2 3; do
+              "$@" && return 0
+              echo "Échec (tentative $i sur 3), nouvelle tentative dans 20 s"
+              sleep 20
+            done
+            return 1
+          }
+          retry docker run --rm -v trivy-cache:/root/.cache/ aquasec/trivy:0.74.0 \
+            image --download-db-only --no-progress --skip-version-check
+          retry docker run --rm -v trivy-cache:/root/.cache/ aquasec/trivy:0.74.0 \
+            image --download-java-db-only --no-progress --skip-version-check
+
       - name: Scanner l'image avec Trivy (bloquant si HIGH ou CRITICAL)
         run: |
           docker run --rm \
             -v /var/run/docker.sock:/var/run/docker.sock \
+            -v trivy-cache:/root/.cache/ \
             aquasec/trivy:0.74.0 image \
+            --skip-db-update \
+            --skip-java-db-update \
             --no-progress \
             --skip-version-check \
             --scanners vuln \
