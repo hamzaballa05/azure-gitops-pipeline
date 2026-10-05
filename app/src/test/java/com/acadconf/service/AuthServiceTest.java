@@ -92,7 +92,7 @@ class AuthServiceTest {
 
         authService.register(utilisateur);
 
-        verify(passwordEncoder).encode("1234");
+        verify(passwordEncoder).encode("9999");
         assertThat(utilisateur.getMotDePasse()).isEqualTo("encoded_1234");
     }
 
